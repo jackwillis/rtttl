@@ -1,0 +1,11 @@
+[package]
+name = "rtttl"
+version = "0.1.0"
+authors = ["Jack Willis <jack@attac.us>"]
+
+[dependencies]
+regex = "0.2"
+lazy_static = "0.2"
+
+[lib]
+name = "rtttl"
