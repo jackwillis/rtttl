@@ -39,12 +39,14 @@ fn test_parse_song_bad() {
 
 #[test]
 fn test_parse_song_good() {
-    let result = Song::parse("ShortHouseGood: d=4,o=5,b=108: 2a4, 2e");
+    let data = "ShortHouseGood: d=4,o=5,b=108: 2a4, 2e, f8.";
+    let result = Song::parse(data);
 
     assert!(result.is_ok());
 
     let song = result.unwrap();
 
+    println!("{}", data);
     println!("{}", song);
     println!("{:?}", song);
 }

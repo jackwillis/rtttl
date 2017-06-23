@@ -12,7 +12,7 @@ pub struct Song<'a> {
 
 impl<'a> fmt::Display for Song<'a> {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        write!(f, "{}: {:?}: {}", self.name, self.metadata, self.melody)
+        write!(f, "{}: {}: {}", self.name, self.metadata, self.melody)
     }
 }
 
