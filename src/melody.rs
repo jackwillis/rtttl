@@ -9,16 +9,14 @@ impl Melody {
         Melody::parse(data, &Metadata::default())
     }
 
-    pub fn parse(data: &str, options: &Metadata) -> Result<Melody, ParseError> {
+    pub fn parse(data: &str, metadata: &Metadata) -> Result<Melody, ParseError> {
         let mut notes: Vec<Note> = vec![];
 
         let note_strs = data.split(",").map(|d| d.trim());
 
         for str in note_strs {
-            match Note::parse(str, &options) {
-                Ok(note) => notes.push(note),
-                Err(err) => return Err(err)
-            }
+            let note = Note::parse(str, &metadata)?;
+            notes.push(note);
         }
 
         Ok(Melody(notes))
