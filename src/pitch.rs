@@ -10,12 +10,11 @@ pub enum Pitch {
 }
 
 impl<'a> TryFrom<&'a str> for Pitch {
-    type Error = ParseError;
+    type Error = ParseError<'a>;
 
-    fn try_from(original: &'a str) -> Result<Pitch, Self::Error> {
+    fn try_from(original: &'a str) -> ParseResult<'a, Pitch> {
         use self::Pitch::*;
-        let name = original.trim().to_uppercase();
-        match &name[..] {
+        match original.trim().to_uppercase().as_str() {
             "P"  => Ok(Rest),
             "C"  => Ok(C),
             "C#" => Ok(Cs),
@@ -29,8 +28,8 @@ impl<'a> TryFrom<&'a str> for Pitch {
             "A"  => Ok(A),
             "A#" => Ok(As),
             "B"  => Ok(B),
-            name => {
-                Err(PitchParseError(name.to_string()))
+            _ => {
+                Err(PitchParseError(original))
             }
         }
     }

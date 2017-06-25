@@ -50,3 +50,9 @@ fn test_parse_song_good() {
     println!("{}", song);
     println!("{:?}", song);
 }
+
+#[test]
+fn test_note_fraction() {
+    let note = Note::parse_default("3c4.").unwrap();
+    println!("{:?}", note.fraction());
+}

@@ -3,6 +3,7 @@
 
 extern crate regex;
 extern crate test;
+extern crate num_rational;
 
 #[macro_use]
 extern crate lazy_static;
@@ -24,5 +25,6 @@ pub use self::pitch::Pitch;
 
 mod errors;
 pub use self::errors::ParseError;
+pub use self::errors::ParseResult;
 
 mod tests;

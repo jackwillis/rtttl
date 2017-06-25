@@ -5,11 +5,11 @@ use super::*;
 pub struct Melody(pub Vec<Note>);
 
 impl Melody {
-    pub fn parse_default(data: &str) -> Result<Melody, ParseError> {
+    pub fn parse_default(data: &str) -> ParseResult<Melody> {
         Melody::parse(data, &Metadata::default())
     }
 
-    pub fn parse(data: &str, metadata: &Metadata) -> Result<Melody, ParseError> {
+    pub fn parse<'a>(data: &'a str, metadata: &Metadata) -> ParseResult<'a, Melody> {
         let mut notes: Vec<Note> = vec![];
 
         let note_strs = data.split(",").map(|d| d.trim());

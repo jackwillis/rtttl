@@ -9,20 +9,21 @@ pub struct Metadata {
     pub bpm: i32
 }
 
+lazy_static! {
+    static ref DEFAULT_METADATA: Metadata = Metadata {
+        duration: 4,
+        octave: 3,
+        bpm: 120
+    };
+}
+
 impl Metadata {
     pub fn default() -> &'static Metadata {
-        lazy_static! {
-            static ref DEF_MD: Metadata = Metadata {
-                duration: 4,
-                octave: 3,
-                bpm: 120
-            };
-        }
-        &DEF_MD
+        &DEFAULT_METADATA
     }
 
-    pub fn parse(tag_data: &str) -> Result<Metadata, ParseError> {
-        let mut metadata = Metadata::default().clone();
+    pub fn parse(tag_data: &str) -> ParseResult<Metadata> {
+        let mut metadata = DEFAULT_METADATA.clone();
 
         for tag_str in tag_data.split(',') {
             let (key, value) = Metadata::parse_tag(tag_str)?;
@@ -31,28 +32,29 @@ impl Metadata {
                 "d" => metadata.duration = value,
                 "o" => metadata.octave   = value,
                 "b" => metadata.bpm      = value,
-                _   => { return Err(MetadataParseError(tag_str.to_string())) }
+                _   => { return Err(MetadataParseError(tag_str)) }
             }
         }
 
         Ok(metadata)
     }
 
-    fn split_tag(tag: &str) -> Result<Vec<&str>, ParseError> {
+    fn split_tag(tag: &str) -> ParseResult<Vec<&str>> {
         let pair: Vec<&str> = tag.split('=').map(|x| x.trim()).collect();
 
         match pair.len() {
             2 => Ok(pair),
-            _ => Err(MetadataParseError(tag.to_string()))
+            _ => Err(MetadataParseError(tag))
         }
     }
 
-    fn parse_tag(data: &str) -> Result<(&str, i32), ParseError> {
+    fn parse_tag(data: &str) -> ParseResult<(&str, i32)> {
         let parts = Metadata::split_tag(data)?;
 
+        let key = parts[0];
         match parts[1].parse::<i32>() {
-            Ok(n)  => Ok((parts[0], n)),
-            Err(_) => Err(MetadataParseError(data.to_string()))
+            Ok(value)  => Ok((key, value)),
+            Err(_) => Err(MetadataParseError(data))
         }
     }
 }

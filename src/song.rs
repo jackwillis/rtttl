@@ -17,7 +17,7 @@ impl<'a> fmt::Display for Song<'a> {
 }
 
 impl<'a> Song<'a> {
-    pub fn parse(data: &'a str) -> Result<Song, ParseError> {
+    pub fn parse(data: &'a str) -> ParseResult<Song> {
         let parts = Song::split_into_parts(&data)?;
 
         let name = parts[0];
@@ -27,12 +27,12 @@ impl<'a> Song<'a> {
         Ok(Song { name: name, metadata: metadata, melody: melody })
     }
 
-    fn split_into_parts(data: &'a str) -> Result<Vec<&'a str>, ParseError> {
+    fn split_into_parts(data: &'a str) -> ParseResult<Vec<&'a str>> {
         let parts: Vec<&'a str> = data.split(':').collect();
 
         match parts.len() {
             3 => Ok(parts),
-            _ => Err(SongParseError(data.to_string()))
+            _ => Err(SongParseError(data))
         }
     }
 }
